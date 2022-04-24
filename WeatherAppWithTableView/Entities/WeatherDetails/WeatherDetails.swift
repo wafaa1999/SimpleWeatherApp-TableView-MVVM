@@ -11,16 +11,16 @@ import Foundation
 struct WeatherDetails: Decodable{
     
     /// Location name
-    var locationName: String
+    var locationName: String?
     
     /// Temperature
-    var temperature: Float
+    var temperature: Float?
     
     /// Icon URL
-    var iconURL: String
+    var iconURL: String?
     
     /// Weather Status
-    var weatherStatus: String
+    var weatherStatus: String?
     
     /**
      Default initialization.
@@ -64,11 +64,11 @@ struct WeatherDetails: Decodable{
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let location = try container.nestedContainer(keyedBy: CodingKeys.self, forKey: .location)
-        self.locationName = try location.decode(String.self, forKey: .locationName)
+        self.locationName = try location.decodeIfPresent(String.self, forKey: .locationName)
         let current = try container.nestedContainer(keyedBy: CodingKeys.self, forKey: .current)
-        self.temperature = try current.decode(Float.self, forKey: .temperature)
+        self.temperature = try current.decodeIfPresent(Float.self, forKey: .temperature)
         let condition = try current.nestedContainer(keyedBy: CodingKeys.self, forKey: .condition)
-        self.iconURL = try condition.decode(String.self, forKey: .iconURL)
-        self.weatherStatus = try condition.decode(String.self, forKey: .weatherStatus)
+        self.iconURL = try condition.decodeIfPresent(String.self, forKey: .iconURL)
+        self.weatherStatus = try condition.decodeIfPresent(String.self, forKey: .weatherStatus)
     }
 }
